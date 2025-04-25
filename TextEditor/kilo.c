@@ -1,0 +1,91 @@
+/*** includes */
+#include <ctype.h>
+#include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <termios.h>
+
+/*** data */
+struct termios orig_termios;
+
+void die(const char *s)
+{
+    perror(s);
+    exit(1);
+}
+
+void disableRawMode()
+{
+    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios) == -1)
+    {
+        die("tcsettattr");
+    }
+}
+
+void enableRawMode()
+{
+    if (tcgetattr(STDIN_FILENO, &orig_termios) == -1)
+    {
+        die("tcgetattr");
+    }
+
+    atexit(disableRawMode);
+
+    struct termios raw = orig_termios;
+
+    /*
+     Echo | Canonical Mode | ctrl + v | interrupt and suspend
+     signals (ctrl+C, ctrl+Z
+    */
+    raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+
+    /* ctrl+M maps to ctrl+J \r -> \n | disables input output control ctrl+S
+    ctrl Q*/
+    raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
+
+    /* disables output of \r\n instead of just a \r; related to ICRNL */
+    raw.c_oflag &= ~(OPOST);
+
+    /* Sets character size to 8 bits per byte */
+    raw.c_cflag |= (CS8);
+
+    /* Sets timeout for read function */
+    raw.c_cc[VMIN] = 0;  // min chars of input needed for read can return
+    raw.c_cc[VTIME] = 1; // tenths of a second
+
+    if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
+    {
+        die("tcsetattr");
+    }
+}
+
+int main()
+{
+    enableRawMode();
+
+    char c = '\0';
+    while (1)
+    {
+        // errno expr is for Cygwin functionality
+        if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN)
+        {
+            die("read");
+        }
+
+        if (iscntrl(c))
+        {
+            printf("%d\r\n", c);
+        }
+        else
+        {
+            printf("%d ('%c')\r\n", c, c);
+        }
+
+        if (c == 'q')
+        {
+            break;
+        }
+    }
+    return 0;
+}
