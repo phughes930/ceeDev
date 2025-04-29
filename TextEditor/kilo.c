@@ -6,9 +6,13 @@
 #include <unistd.h>
 #include <termios.h>
 
+/*** defines */
+#define CTRL_KEY(k) (k & 0x1f)
+
 /*** data */
 struct termios orig_termios;
 
+/*** terminal */
 void die(const char *s)
 {
     perror(s);
@@ -60,32 +64,46 @@ void enableRawMode()
     }
 }
 
+char editorReadKey()
+{
+    int nread;
+    char c;
+    // errno expr is for Cygwin functionality
+    while ((nread = read(STDIN_FILENO, &c, 1)) != 1)
+    {
+        if (nread == -1 && errno == EAGAIN)
+        {
+            die("read");
+        }
+    }
+    return c;
+}
+/*** output */
+void editorRefreshScreen()
+{
+    write(STDOUT_FILENO, "\x1b[2J", 4);
+}
+
+/*** input */
+void editorProcessKeyPress()
+{
+    char c = editorReadKey();
+    switch (c)
+    {
+    case CTRL_KEY('q'):
+        exit(0);
+        break;
+    }
+}
+
+/*** init */
 int main()
 {
     enableRawMode();
 
-    char c = '\0';
     while (1)
     {
-        // errno expr is for Cygwin functionality
-        if (read(STDIN_FILENO, &c, 1) == -1 && errno != EAGAIN)
-        {
-            die("read");
-        }
-
-        if (iscntrl(c))
-        {
-            printf("%d\r\n", c);
-        }
-        else
-        {
-            printf("%d ('%c')\r\n", c, c);
-        }
-
-        if (c == 'q')
-        {
-            break;
-        }
+        editorProcessKeyPress();
     }
     return 0;
 }
