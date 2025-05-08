@@ -1,3 +1,5 @@
+#include <string.h>
+
 /* StrCmp: return <0 if s<t, 0 if s==t, >0 if s>t */
 int StrCmp(char *s, char *t)
 {
