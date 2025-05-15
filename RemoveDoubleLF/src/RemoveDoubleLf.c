@@ -25,8 +25,8 @@ int main(int argc, char **argv)
     fileData->len = 0;
     fileData->str = NULL;
 
-    FILE *xmlFile = fopen(path, 'r');
-    removeDoubleLf(fileData, xmlFile);
+    FILE *xmlFile = fopen(path, "r");
+    removeDoubleLf(xmlFile, fileData);
 
     struct abuf *pathPieces[MAXSPLIT];
     int numPieces = split(fileData, pathPieces, '/');
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         appendBuffer(outputPath, pathPieces[i]->str, pathPieces[i]->len);
     }
 
-    FILE *newFile = fopen(outputPath->str, 'w');
+    FILE *newFile = fopen(outputPath->str, "w");
     fwrite(outputPath->str, sizeof(outputPath->str), 1, newFile);
 
     return 0;
@@ -69,7 +69,7 @@ int split(struct abuf *string, struct abuf **dest, char delim)
 {
     int i = 0;
     int numPieces = 0;
-    char c = NULL;
+    char c;
     while (c != '\0') {
         struct abuf *new = malloc(sizeof(struct abuf));
         new->len = 0;
