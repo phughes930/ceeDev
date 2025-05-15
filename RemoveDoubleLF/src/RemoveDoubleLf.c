@@ -13,13 +13,11 @@ void removeDoubleLf(FILE *, struct abuf *);
 int main(int argc, char **argv)
 {
     if (argc < 2) {
-        printf("Usage: RemoveDoubleLF <filepath> <outputname>");
+        printf("Usage: RemoveDoubleLF <filepath> <outputname>\n");
         return -1;
     }
     char *path = argv[1];
-    struct abuf *outputName = malloc(sizeof(struct abuf));
-    outputName->len = strlen(argv[2]);
-    outputName->str = argv[2];
+    char *outputPath = argv[2];
 
     struct abuf *fileData = malloc(sizeof(struct abuf));
     fileData->len = 0;
@@ -28,19 +26,8 @@ int main(int argc, char **argv)
     FILE *xmlFile = fopen(path, "r");
     removeDoubleLf(xmlFile, fileData);
 
-    struct abuf *pathPieces[MAXSPLIT];
-    int numPieces = split(fileData, pathPieces, '/');
-
-    pathPieces[numPieces] = outputName;
-    struct abuf *outputPath = malloc(sizeof(struct abuf));
-    outputPath->len = 0;
-    outputPath->str = NULL;
-    for (int i = 0; i < numPieces; i++) {
-        appendBuffer(outputPath, pathPieces[i]->str, pathPieces[i]->len);
-    }
-
-    FILE *newFile = fopen(outputPath->str, "w");
-    fwrite(outputPath->str, sizeof(outputPath->str), 1, newFile);
+    FILE *newFile = fopen(outputPath, "w");
+    fwrite(fileData->str, fileData->len - 1, 1, newFile);
 
     return 0;
 }
@@ -71,11 +58,14 @@ int split(struct abuf *string, struct abuf **dest, char delim)
     int numPieces = 0;
     char c;
     while (c != '\0') {
+        printf("Entering split outer loop\n");
         struct abuf *new = malloc(sizeof(struct abuf));
         new->len = 0;
         new->str = NULL;
+
         while ((c = string->str[i++]) != delim && c != '\0') {
-            char new_char[1];
+            char new_char[0];
+            printf("%c\n", c);
             new_char[0] = c;
             appendBuffer(new, new_char, 1);
         }
