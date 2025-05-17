@@ -4,10 +4,10 @@ CFLAGS=-I$(IDIR) -std=c99 -g
 
 ODIR=obj
 
-_DEPS=
+_DEPS=abuf.h readcsv.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ=csv.o
+_OBJ=csv.o readcsv.o abuf.o
 OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
