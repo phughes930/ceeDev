@@ -15,41 +15,55 @@ struct intarr *multiples(int p, int n)
     return array;
 }
 
+void printsieve(struct intarr *sieve)
+{
+    int stop = 0;
+    for (int i = 0; i < sieve->len; i++) {
+        if (i % 6 == 0 && i > 0) {
+            printf("%d\n", sieve->arr[i]);
+        } else {
+            printf("%d | ", sieve->arr[i]);
+        }
+    }
+    printf("\n");
+}
+
 /* sieve: returns a pointer to array of prime numbers less than n*/
 struct intarr *sieve(int n)
 {
     struct intarr *primes = initintarr();
+    struct intarr *consec = initintarr();
     for (int i = 2; i < n; i++) {
+        appendint(consec, i);
         appendint(primes, i);
     }
+    // printf("PRIMES: \n");
+    // printsieve(primes);
+    // printf("CONSEC: \n");
+    // printsieve(consec);
 
     int prod;
     int index = 0;
-    while (index < primes->len) {
-        for (int i = 1; (prod = primes->arr[index] * i) < n; i++) {
-            removeval(primes, prod);
+    for (int i = 0; i < consec->len; i++) {
+        int num = consec->arr[i];
+        // printf("using num %d\n", num);
+        int prod;
+        if (binsearch(primes->arr, 0, primes->len, num) > -1) {
+            for (int j = 2; (prod = num * j) < n; j++) {
+                // printf("\tremoving %d\n", prod);
+                removeval(primes, prod);
+            }
+        } else {
+            continue;
         }
-        index++;
+        /* test debugger */
+        // printf("PRINTING PRIMES ITERATION\n");
+        // printsieve(primes);
+        // if (num >= 3) {
+        //     break;
+        // }
+        /* end test debugger */
     }
 
     return primes;
-}
-
-void printsieve(struct intarr *sieve)
-{
-    int stop = 0;
-    for (int i = 0; i < sieve->len;) {
-        if (i + 6 < sieve->len)
-            stop = i + 6;
-        else
-            stop = sieve->len;
-
-        while (i < stop) {
-            if (i < stop - 1)
-                printf("%s |", sieve->arr[i]);
-
-            if (i == stop - 1)
-                printf("%s \n", sieve->arr[i]);
-        }
-    }
 }
