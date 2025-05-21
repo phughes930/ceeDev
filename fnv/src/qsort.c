@@ -10,7 +10,7 @@ void swap(uint32_t *a, uint32_t *b)
 
 int partition(uint32_t *arr, int low, int high)
 {
-    int p = arr[low];
+    uint32_t p = arr[low];
     int i = low;
     int j = high;
 
@@ -23,7 +23,7 @@ int partition(uint32_t *arr, int low, int high)
 
         // find the first element less than
         // the pivot (from last)
-        while (arr[j] >= p && i >= low + 1) {
+        while (arr[j] > p && j >= low + 1) {
             j--;
         }
 
@@ -31,11 +31,12 @@ int partition(uint32_t *arr, int low, int high)
             swap(&arr[i], &arr[j]);
         }
     }
-    swap(&arr[low], &arr[high]);
+    swap(&arr[low], &arr[j]);
     return j;
 }
 
-void quicksort(int *arr, int low, int high)
+/* quicksort: sort items in arr starting from index low to index high */
+void quicksort(uint32_t *arr, int low, int high)
 {
     // call partition function to find partition index
     if (low < high) {

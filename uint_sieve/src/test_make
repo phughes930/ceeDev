@@ -1,0 +1,22 @@
+CC=gcc
+IDIR=../include
+CFLAGS=-g -I$(IDIR) -std=c99
+
+ODIR=obj
+
+_DEPS=intarr.h arrfunc.h 
+DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
+
+_OBJ=runsieve.o arrfunc.o
+OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
+
+$(ODIR)/%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+runsieve: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
+
+.PHONY: clean
+
+clean:
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~

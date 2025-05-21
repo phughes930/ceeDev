@@ -11,9 +11,9 @@ void printsieve(struct intarr *sieve)
     int stop = 0;
     for (int i = 0; i < sieve->len; i++) {
         if (i % 6 == 0 && i > 0) {
-            printf("%u\n", sieve->arr[i]);
+            printf("%d\n", sieve->arr[i]);
         } else {
-            printf("%u | ", sieve->arr[i]);
+            printf("%d | ", sieve->arr[i]);
         }
     }
     printf("\n");
@@ -28,23 +28,32 @@ struct intarr *sieve(uint32_t n)
         appendint(consec, i);
         appendint(primes, i);
     }
-    printf("constructed base arrays for sieve\n");
+    // printf("PRIMES: \n");
+    // printsieve(primes);
+    // printf("CONSEC: \n");
+    // printsieve(consec);
 
     uint32_t prod;
+    int index = 0;
     for (int i = 0; i < consec->len; i++) {
-        printf("entering outer for loop in sieve\n");
         uint32_t num = consec->arr[i];
-        printf("defined num = %u\n", num);
+        // printf("using num %d\n", num);
+        int prod;
         if (binsearch(primes->arr, 0, primes->len, num) > -1) {
-            printf("num %u still in primes arr\n", num);
             for (uint32_t j = 2; (prod = num * j) < n; j++) {
-                printf("removing val %u from primes\n", prod);
+                // printf("\tremoving %d\n", prod);
                 removeval(primes, prod);
-                printf("successfully removed val %u from primes\n", prod);
             }
         } else {
             continue;
         }
+        /* test debugger */
+        // printf("PRINTING PRIMES ITERATION\n");
+        // printsieve(primes);
+        // if (num >= 3) {
+        //     break;
+        // }
+        /* end test debugger */
     }
 
     return primes;

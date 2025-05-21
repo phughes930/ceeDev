@@ -2,6 +2,7 @@
 #define QSORT_H
 #include <stdint.h>
 
-void quicksort(uint32_t *, int, int);
+/* quicksort: sort items in arr starting from index low to index high */
+void quicksort(uint32_t *arr, int low, int high);
 
 #endif
