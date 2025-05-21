@@ -58,10 +58,8 @@ int linsearch(uint32_t *arr, int len, uint32_t find)
 
 void removeindex(struct intarr *array, int index)
 {
-    printf("index %d, array->len %d\n", index, array->len);
     if (index < array->len) {
         size_t newarrsize = sizeof(uint32_t) * (array->len - 1);
-        printf("allocating for new array %d bytes\n", newarrsize);
         int *newarr = malloc(newarrsize);
         for (int i = 0, j = 0; i < array->len; i++, j++) {
             if (i == index) {
@@ -69,21 +67,17 @@ void removeindex(struct intarr *array, int index)
             }
             newarr[j] = array->arr[i];
         }
-        printf("finished array copy process\n");
         free(array->arr);
         array->arr = newarr;
         array->len -= 1;
     }
-    printf("new array->len = %d\n", array->len);
 }
 
 void removeval(struct intarr *array, uint32_t remval)
 {
     int rem;
     if ((rem = binsearch(array->arr, 0, array->len - 1, remval)) < 0) {
-        printf("val %u not found in array, not removing\n", remval);
         return;
     }
-    printf("val %u found in array, removing\n", remval);
     removeindex(array, rem);
 }

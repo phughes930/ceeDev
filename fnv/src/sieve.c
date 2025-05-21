@@ -20,32 +20,37 @@ void printsieve(struct intarr *sieve)
 }
 
 /* sieve: returns a pointer to array of prime numbers less than n*/
-struct intarr *sieve(uint32_t n)
+void sieve(struct intarr *primes, int start)
 {
-    struct intarr *primes = initintarr();
-    struct intarr *consec = initintarr();
-    for (uint32_t i = 2; i < n; i++) {
-        appendint(consec, i);
-        appendint(primes, i);
-    }
-    printf("constructed base arrays for sieve\n");
-
     uint32_t prod;
-    for (int i = 0; i < consec->len; i++) {
-        printf("entering outer for loop in sieve\n");
-        uint32_t num = consec->arr[i];
-        printf("defined num = %u\n", num);
-        if (binsearch(primes->arr, 0, primes->len, num) > -1) {
-            printf("num %u still in primes arr\n", num);
-            for (uint32_t j = 2; (prod = num * j) < n; j++) {
-                printf("removing val %u from primes\n", prod);
-                removeval(primes, prod);
-                printf("successfully removed val %u from primes\n", prod);
-            }
-        } else {
-            continue;
+    uint32_t start_num = primes->arr[start];
+    uint32_t max_mult = primes->arr[primes->len - 1] / start_num;
+    if (binsearch(primes->arr, 0, primes->len, start_num) > -1) {
+        for (uint32_t mult = 2; mult <= max_mult; mult++) {
+            removeval(primes, start_num * mult);
         }
     }
 
-    return primes;
+    if (start < primes->len - 1) {
+        sieve(primes, ++start);
+    }
+}
+
+uint32_t bigsieve(struct intarr *possible_primes)
+{
+    for (int i = 0; i < possible_primes->len; i++) {
+        int isprime = 1;
+        uint32_t testval = possible_primes->arr[i];
+        for (uint32_t div = 2; div < testval; div++) {
+            if (testval % div == 0) {
+                isprime = 0;
+                break;
+            }
+        }
+
+        if (isprime) {
+            return testval;
+        }
+    }
+    return 0;
 }

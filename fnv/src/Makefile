@@ -6,10 +6,10 @@ ODIR=obj
 
 LIBS=-lm
 
-_DEPS=intarr.h arrfunc.h sieve.h qsort.h
+_DEPS=intarr.h arrfunc.h sieve.h qsort.h fnvprime.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ=main.o arrfunc.o sieve.o qsort.o
+_OBJ=main.o arrfunc.o sieve.o qsort.o fnvprime.o
 OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
