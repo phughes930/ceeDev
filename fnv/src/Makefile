@@ -9,13 +9,13 @@ LIBS=-lm
 _DEPS=intarr.h arrfunc.h sieve.h qsort.h fnvprime.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ=main.o arrfunc.o sieve.o qsort.o fnvprime.o
+_OBJ=fnv.o arrfunc.o sieve.o qsort.o fnvprime.o
 OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-fnvprime: $(OBJ)
+fnv: $(OBJ)
 	$(CC) -o $@ $^ $(LIBS) $(CFLAGS)
 
 .PHONY: clean
