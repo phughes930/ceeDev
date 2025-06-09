@@ -94,3 +94,40 @@ void prob3_24()
            the if statement evaluates to true */
     }
 }
+
+// Practice Problem 3.27
+int test(int x, int y)
+{
+    int val = 4 * x;
+    if (y > 0) {
+        if (x < y)
+            val = x - y;
+        else
+            val = x ^ y;
+    } else if (y < -2)
+        val = x + y;
+    return val;
+}
+
+// Practice Problem 3.29
+int switcher(int a, int b, int c)
+{
+    int answer;
+    switch (a) {
+    case 5:
+        c = b ^ 15;
+    case 0:
+        answer = c + 112;
+        break;
+    case 2:
+    case 7:
+        answer = (c + b) << 4;
+        break;
+    case 4:
+        answer = 4;
+        break;
+    default:
+        answer = b;
+    }
+    return answer;
+}
