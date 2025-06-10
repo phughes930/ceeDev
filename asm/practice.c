@@ -131,3 +131,61 @@ int switcher(int a, int b, int c)
     }
     return answer;
 }
+
+// Practice Problem 3.34
+/* rfun: counts number of 1 bits in x */
+int rfun(unsigned x)
+{
+    if (x == 0)
+        return 0;
+    unsigned nx = x >> 1;
+    int rv = rfun(nx);
+    return (x & 1) + rv;
+}
+
+// Practice Problem 3.38
+#define N 16
+typedef int fix_matrix[N][N];
+
+/* Compute i,k of fixed matrix product */
+int fix_prod_ele(fix_matrix A, fix_matrix B, int i, int k)
+{
+    int j;
+    int result = 0;
+
+    for (j = 0; j < N; j++)
+        result += A[i][j] * B[j][k];
+
+    return result;
+}
+
+/* Compute i,k of fixed matrix product */
+int fix_prod_ele_opt(fix_matrix A, fix_matrix B, int i, int k)
+{
+    int *Arow = &A[i][0];
+    int *Bptr = &B[0][k];
+    int result = 0;
+    int j;
+    for (j = 0; j != N; j++) {
+        result += Arow[j] * *Bptr;
+        Btr += N;
+    }
+    return result;
+}
+
+void fix_set_diag(fix_matrix A, int val)
+{
+    int i;
+    for (i = 0; i < N, i++)
+        A[i][i] = val;
+}
+
+void fix_set_diag_opt(fix_matrix A, int val)
+{
+    int *Aptr = &A;
+    int i;
+    for (i = 0; i < N; i++) {
+        *Aptr = val;
+        Aptr += N + 1;
+    }
+}
