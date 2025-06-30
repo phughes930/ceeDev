@@ -6,9 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void printsieve(struct intarr *sieve)
-{
-    int stop = 0;
+void printsieve(struct intarr *sieve) {
     for (int i = 0; i < sieve->len; i++) {
         if (i % 6 == 0 && i > 0) {
             printf("%u\n", sieve->arr[i]);
@@ -20,9 +18,7 @@ void printsieve(struct intarr *sieve)
 }
 
 /* sieve: returns a pointer to array of prime numbers less than n*/
-void sieve(struct intarr *primes, int start)
-{
-    uint32_t prod;
+void sieve(struct intarr *primes, int start) {
     uint32_t start_num = primes->arr[start];
     uint32_t max_mult = primes->arr[primes->len - 1] / start_num;
     if (binsearch(primes->arr, 0, primes->len, start_num) > -1) {
@@ -36,8 +32,7 @@ void sieve(struct intarr *primes, int start)
     }
 }
 
-uint32_t bigsieve(struct intarr *possible_primes)
-{
+uint32_t bigsieve(struct intarr *possible_primes) {
     for (int i = 0; i < possible_primes->len; i++) {
         int isprime = 1;
         uint32_t testval = possible_primes->arr[i];
