@@ -1,8 +1,11 @@
 IDIR=../include
+LDIR=../lib
 CC=gcc
-CFLAGS=-I$(IDIR) -std=c99 -g
+CFLAGS=-I$(IDIR) -L$(LDIR) -std=c99 -g
 
 ODIR=obj
+
+LIBS=-lm -lfnv
 
 _DEPS=abuf.h readcsv.h
 DEPS=$(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -15,7 +18,7 @@ $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 csv: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
 
