@@ -1,6 +1,5 @@
 #define _GNU_SOURCE
-#include "intarr.h"
-#include <math.h>
+#include "../include/intarr.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

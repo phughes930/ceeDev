@@ -1,7 +1,5 @@
 #define _GNU_SOURCE
-#include "fnvprime.h"
-#include <ctype.h>
-#include <math.h>
+#include "../include/fnvprime.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>

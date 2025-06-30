@@ -1,6 +1,7 @@
 #ifndef FNV_H
 #define FNV_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 uint32_t fnv1(uint8_t *src, size_t n_bytes, uint32_t offset_basis);

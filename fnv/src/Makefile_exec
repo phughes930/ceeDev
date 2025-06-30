@@ -1,6 +1,6 @@
 IDIR=../include
 CC=gcc
-CFLAGS=-I$(IDIR) -Wall -g -std=c99
+CFLAGS=-I$(IDIR) -g -std=c99
 
 ODIR=obj
 
@@ -15,11 +15,10 @@ OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-fnv.a: $(OBJ)
-	ar ruv $@ $^ 
-	ranlib $@
+fnv: $(OBJ)
+	$(CC) -o $@ $^ $(LIBS) $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ ./*.o
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~

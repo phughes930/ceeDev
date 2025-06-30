@@ -1,10 +1,8 @@
 #define _GNU_SOURCE
-#include "arrfunc.h"
-#include "intarr.h"
+#include "../include/arrfunc.h"
+#include "../include/intarr.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 void printsieve(struct intarr *sieve) {
     for (int i = 0; i < sieve->len; i++) {

@@ -1,13 +1,9 @@
 #define _GNU_SOURCE
-#include "arrfunc.h"
-#include "intarr.h"
-#include "qsort.h"
-#include "sieve.h"
-#include <ctype.h>
-#include <math.h>
+#include "../include/arrfunc.h"
+#include "../include/intarr.h"
+#include "../include/qsort.h"
+#include "../include/sieve.h"
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 int validateB(uint32_t b);
 int countsetbits(uint32_t b);
@@ -16,16 +12,14 @@ struct intarr *getbvals();
 struct intarr *getpossibleprimes(struct intarr *b_values);
 int isvalidp(uint32_t p);
 
-uint32_t getfnvprime()
-{
+uint32_t getfnvprime() {
     struct intarr *bvals = getbvals();
     struct intarr *primeposs = getpossibleprimes(bvals);
     uint32_t lowestprime = bigsieve(primeposs);
     return lowestprime;
 }
 
-struct intarr *getpossibleprimes(struct intarr *b_values)
-{
+struct intarr *getpossibleprimes(struct intarr *b_values) {
     struct intarr *possibilities = initintarr();
     for (uint32_t s = 5; s < 11; s++) {
         for (int i = 0; i < b_values->len; i++) {
@@ -52,8 +46,7 @@ struct intarr *getpossibleprimes(struct intarr *b_values)
     return possibilities;
 }
 
-int isvalidp(uint32_t p)
-{
+int isvalidp(uint32_t p) {
     uint32_t lhs = p % (unsignedpow(2, 40) - unsignedpow(2, 24) - 1);
     uint32_t rhs = unsignedpow(2, 24) + unsignedpow(2, 8) + unsignedpow(2, 7);
     if (lhs > rhs) {
@@ -63,8 +56,7 @@ int isvalidp(uint32_t p)
     }
 }
 
-struct intarr *getbvals()
-{
+struct intarr *getbvals() {
     struct intarr *bvals = initintarr();
     for (uint32_t b = 1; b < 256; b++) {
         if (validateB(b)) {
@@ -74,8 +66,7 @@ struct intarr *getbvals()
     return bvals;
 }
 
-uint32_t unsignedpow(uint32_t x, uint32_t y)
-{
+uint32_t unsignedpow(uint32_t x, uint32_t y) {
     uint32_t result = x;
 
     for (; y > 1; y--) {
@@ -84,8 +75,7 @@ uint32_t unsignedpow(uint32_t x, uint32_t y)
     return result;
 }
 
-int validateB(uint32_t b)
-{
+int validateB(uint32_t b) {
     int bitcount = countsetbits(b);
     if (bitcount == 4 || bitcount == 5) {
         return 1;
@@ -94,8 +84,7 @@ int validateB(uint32_t b)
     }
 }
 
-int countsetbits(uint32_t b)
-{
+int countsetbits(uint32_t b) {
     int count = 0;
     while (b != 0) {
         count += b & 1;

@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int getValues(struct abuf *headerData, struct abuf *colptr, int start, char delim)
-{
+int getValues(struct abuf *headerData, struct abuf *colptr, int start, char delim) {
     int j = start;
     char v, vplus;
     int quoteflag = 0;
@@ -31,8 +30,7 @@ int getValues(struct abuf *headerData, struct abuf *colptr, int start, char deli
     return j;
 }
 
-int parseRow(struct abuf **destArr, struct abuf *headerData, char delim)
-{
+int parseRow(struct abuf **destArr, struct abuf *headerData, char delim) {
     int i = 0;
     int numcols = 0;
     while (i < headerData->len) {
@@ -43,4 +41,17 @@ int parseRow(struct abuf **destArr, struct abuf *headerData, char delim)
     }
 
     return numcols;
+}
+
+int getCsvRow(FILE *csv, struct abuf **headerArr) {
+    struct abuf *headers = initBuffer();
+
+    char *temp = NULL;
+    size_t headerSize = 0;
+    getline(&temp, &headerSize, csv);
+    appendBuffer(headers, temp, strlen(temp));
+    free(temp);
+
+    int numCols = parseRow(headerArr, headers, ',');
+    return numCols;
 }
