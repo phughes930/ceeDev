@@ -1,9 +1,16 @@
-#define _GNU_SOURCE
 #include <stdio.h>
+
+void echo()
+{
+    char buf[8];
+    gets(buf);
+    puts(buf);
+}
 
 int main()
 {
-    int x = sizeof(long double);
-    printf("%d\n", x);
+    echo();
+
+    long int x = 12L;
     return 0;
 }
